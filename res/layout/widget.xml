@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="15dp"
+		android:layout_marginLeft="25px"
 		android:text="@string/appName" 
 		android:textColor="@color/widgetFont" />
 	<TextView android:id="@+id/saintsDayNames"
