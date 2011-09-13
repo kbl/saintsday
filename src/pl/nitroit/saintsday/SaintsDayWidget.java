@@ -25,18 +25,14 @@ public class SaintsDayWidget extends AppWidgetProvider {
 	private StringBuilder builder;
 
 	@Override
-	public void onEnabled(Context context) {
-		super.onEnabled(context);
-		dao = new SaintsDayDao(context);
-		builder = new StringBuilder();
-	}
-
-	@Override
 	public void onUpdate(
 			Context context,
 			AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
+
+		initializeDao(context);
+		builder = new StringBuilder();
 
 		String todaysSaints = prepareTodaySaints();
 		for(int i = 0; i < appWidgetIds.length; i++) {
@@ -44,12 +40,21 @@ public class SaintsDayWidget extends AppWidgetProvider {
 			views.setTextViewText(R.id.saintsDayNames, todaysSaints);
 			appWidgetManager.updateAppWidget(appWidgetIds[i], views);
 		}
+
+		dao.close();
+	}
+
+	private void initializeDao(Context context) {
+		if(dao == null) {
+			dao = new SaintsDayDao(context);
+		}
+		dao.open();
 	}
 
 	private String prepareTodaySaints() {
-		Calendar x = GregorianCalendar.getInstance();
-		int day = x.get(Calendar.DAY_OF_MONTH);
-		int realMonth = x.get(Calendar.MONTH) + REAL_MONTH;
+		Calendar calendar = GregorianCalendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		int realMonth = calendar.get(Calendar.MONTH) + REAL_MONTH;
 		List<String> names = dao.getSaintsForDate(realMonth, day);
 		return concatenateNames(names);
 	}

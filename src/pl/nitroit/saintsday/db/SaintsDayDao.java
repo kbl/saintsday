@@ -29,12 +29,15 @@ public class SaintsDayDao {
 		helper = new SaintsDayDbHelper(context);
 	}
 
-
 	public SaintsDayDao open() {
 		if(db == null || !db.isOpen()) {
 			db = helper.getReadableDatabase();
 		}
 		return this;
+	}
+
+	public void close() {
+		db.close();
 	}
 
 	public List<String> getSaintsForDate(Integer month, Integer day) {
