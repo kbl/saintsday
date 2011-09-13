@@ -16,6 +16,12 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class SaintsDayDao {
 
+	public static final String TABLE = "names";
+
+	public static final String DAY_COLUMN = "day";
+	public static final String MONTH_COLUMN = "month";
+	public static final String NAME_COLUMN = "name";
+
 	private SaintsDayDbHelper helper;
 	private SQLiteDatabase db;
 
@@ -33,8 +39,8 @@ public class SaintsDayDao {
 
 	public List<String> getSaintsForDate(Integer month, Integer day) {
 		Cursor names = db.query(
-				"names",
-				new String[] { "name" },
+				TABLE,
+				new String[] { NAME_COLUMN },
 				"WHERE month = ? AND day = ?",
 				new String[] { String.valueOf(month), String.valueOf(day)}, null, null, null);
 

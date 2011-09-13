@@ -3,6 +3,7 @@
  */
 package pl.nitroit.saintsday.db;
 
+import pl.nitroit.saintsday.db.seed.DbSeeder;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -29,17 +30,7 @@ public class SaintsDayDbHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_DB_STMT);
-		seedData(db);
-	}
-
-	private void seedData(SQLiteDatabase db) {
-		try {
-			db.beginTransaction();
-			// TODO_MAPI : insert data into db
-			db.setTransactionSuccessful();
-		} finally {
-			db.endTransaction();
-		}
+		new DbSeeder(db).seedDb();
 	}
 
 	@Override
