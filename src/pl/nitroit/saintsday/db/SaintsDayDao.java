@@ -44,7 +44,7 @@ public class SaintsDayDao {
 		Cursor names = db.query(
 				TABLE,
 				new String[] { NAME_COLUMN },
-				"WHERE month = ? AND day = ?",
+				"month = ? AND day = ?",
 				new String[] { String.valueOf(month), String.valueOf(day)}, null, null, null);
 
 		return getNamesFromCursor(names);
