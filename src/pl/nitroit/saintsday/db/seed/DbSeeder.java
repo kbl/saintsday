@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class DbSeeder {
 
-	private static final String RAW_DATA_FILE_PATH = "assets/pl_saints_days.csv";
+	private static final String RAW_DATA_FILE_PATH = "pl_saints_days.csv";
 
 	private SQLiteDatabase db;
 	private AssetManager assetsManager;
