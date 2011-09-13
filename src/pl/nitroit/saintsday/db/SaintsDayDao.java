@@ -25,7 +25,7 @@ public class SaintsDayDao {
 
 
 	public SaintsDayDao open() {
-		if(db == null) {
+		if(db == null || !db.isOpen()) {
 			db = helper.getReadableDatabase();
 		}
 		return this;
