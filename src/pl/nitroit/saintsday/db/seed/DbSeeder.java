@@ -6,6 +6,7 @@ package pl.nitroit.saintsday.db.seed;
 import pl.nitroit.saintsday.db.SaintsDayDao;
 import pl.nitroit.saintsday.db.seed.CsvParser.Record;
 import android.content.ContentValues;
+import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -14,18 +15,22 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class DbSeeder {
 
-	private static final String RAW_DATA_FILE_PATH = "/assets/pl_saints_days.csv";
+	private static final String RAW_DATA_FILE_PATH = "assets/pl_saints_days.csv";
 
 	private SQLiteDatabase db;
+	private AssetManager assetsManager;
+
 	private ContentValues values;
 
-	public DbSeeder(SQLiteDatabase db) {
+
+	public DbSeeder(AssetManager assetsManager, SQLiteDatabase db) {
+		this.assetsManager = assetsManager;
 		this.db = db;
 		values = new ContentValues();
 	}
 
 	public void seedDb() {
-		CsvParser parser = new CsvParser(RAW_DATA_FILE_PATH);
+		CsvParser parser = new CsvParser(assetsManager, RAW_DATA_FILE_PATH);
 		try {
 			db.beginTransaction();
 			CsvParser.Record record = null;

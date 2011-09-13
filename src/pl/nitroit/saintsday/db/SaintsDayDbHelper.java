@@ -23,14 +23,18 @@ public class SaintsDayDbHelper extends SQLiteOpenHelper {
 			"month INTEGER NOT NULL," +
 			"name VARCHAR NOT NULL);";
 
+	// unfortunatelly context in parent isn't accessible ):
+	private Context context;
+
 	public SaintsDayDbHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
+		this.context = context;
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_DB_STMT);
-		new DbSeeder(db).seedDb();
+		new DbSeeder(context.getAssets(), db).seedDb();
 	}
 
 	@Override

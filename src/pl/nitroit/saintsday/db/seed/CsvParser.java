@@ -4,8 +4,11 @@
 package pl.nitroit.saintsday.db.seed;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import android.content.res.AssetManager;
 
 
 /**
@@ -32,9 +35,10 @@ class CsvParser {
 		String[] names;
 	}
 
-	public CsvParser(String filePath) {
+	public CsvParser(AssetManager manager, String filePath) {
 		try {
-			reader = new BufferedReader(new FileReader(filePath));
+			InputStream inputStream = manager.open(filePath);
+			reader = new BufferedReader(new InputStreamReader(inputStream));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
