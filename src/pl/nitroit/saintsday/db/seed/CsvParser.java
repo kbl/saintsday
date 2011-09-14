@@ -23,7 +23,7 @@ class CsvParser {
 
 	private BufferedReader reader;
 
-	public static class Record {
+	public static final class Record {
 		public Record(Integer day, Integer month, String[] names) {
 			this.day = day;
 			this.month = month;
