@@ -3,13 +3,18 @@
  */
 package pl.nitroit.saintsday;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import pl.nitroit.saintsday.db.SaintsDayDao;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.widget.RemoteViews;
 
 /**
@@ -43,6 +48,23 @@ public class SaintsDayWidget extends AppWidgetProvider {
 		}
 
 		dao.close();
+
+		List<String> x = new ArrayList<String>();
+
+		for(String saintName : todaySaints) {
+			Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI, saintName);
+			Cursor contactsCursor = context.getContentResolver().query(
+					contactUri,
+					new String[] {ContactsContract.Contacts.Data._ID, ContactsContract.Contacts.DISPLAY_NAME},
+					null, null, null);
+			if(contactsCursor.moveToFirst()) {
+				do {
+					int id = contactsCursor.getInt(0);
+					String displayName = contactsCursor.getString(1);
+					x.add(displayName);
+				} while(contactsCursor.moveToNext());
+			}
+		}
 
 	}
 
