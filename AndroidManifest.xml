@@ -5,6 +5,8 @@
 		android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="8" />
 
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+
 	<application 
 			android:icon="@drawable/icon" 
 			android:label="@string/appName">
