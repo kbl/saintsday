@@ -8,10 +8,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import pl.nitroit.saintsday.db.SaintsDayDao;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.text.format.DateUtils;
 
@@ -20,6 +25,8 @@ import android.text.format.DateUtils;
  *
  */
 public class UserNotifier {
+
+	public static final int NOTIFICATION_ID = 123321;
 
 	private static final String WHERE_EXISTS_PHONE_NUMBER = ContactsContract.Data.HAS_PHONE_NUMBER + " = 1";
 
@@ -35,9 +42,20 @@ public class UserNotifier {
 	public void notifiyAboutTodaySaints() {
 		if(notificationShouldBeSend()) {
 			Set<Integer> contactIds = obtainContactIdsToNotify();
-			dao.open().setLastNotifiedAndRemoveOldTimestamp(new Date());
+			if(!contactIds.isEmpty()) {
+				NotificationManager manager =
+						(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+				manager.notify(NOTIFICATION_ID, createNotification(contactIds));
+				dao.open().setLastNotifiedAndRemoveOldTimestamp(new Date());
+			}
 		}
 		dao.close();
+	}
+
+	private boolean notificationShouldBeSend() {
+		long notificationTimestamp = dao.getLastNotifiedTimestamp();
+		return notificationTimestamp == SaintsDayDao.NO_NOTIFICATION ||
+				!DateUtils.isToday(notificationTimestamp);
 	}
 
 	private Set<Integer> obtainContactIdsToNotify() {
@@ -61,10 +79,17 @@ public class UserNotifier {
 		return contacts;
 	}
 
-	private boolean notificationShouldBeSend() {
-		long notificationTimestamp = dao.getLastNotifiedTimestamp();
-		return notificationTimestamp == SaintsDayDao.NO_NOTIFICATION ||
-				!DateUtils.isToday(notificationTimestamp);
+	private Notification createNotification(Set<Integer> contactIds) {
+		Notification notification = new Notification(
+				R.drawable.icon,
+				"works?",
+				SystemClock.currentThreadTimeMillis());
+		Intent intent = new Intent(context, this.getClass());
+		intent.getExtras().putLongArray("abc", new long[0]);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, intent, 0);
+		notification.setLatestEventInfo(context, "bu", "buz", contentIntent);
+
+		return notification ;
 	}
 
 }

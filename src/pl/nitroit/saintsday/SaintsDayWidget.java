@@ -38,7 +38,7 @@ public class SaintsDayWidget extends AppWidgetProvider {
 
 		initializeDao();
 		updateWidgetView(appWidgetManager, appWidgetIds);
-		new UserNotifier(this.context).notifiyAboutTodaySaints();
+		new UserNotifier(context).notifiyAboutTodaySaints();
 
 		dao.close();
 	}
