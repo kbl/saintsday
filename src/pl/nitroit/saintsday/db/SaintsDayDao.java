@@ -42,7 +42,9 @@ public class SaintsDayDao {
 	}
 
 	public void close() {
-		db.close();
+		if(db != null) {
+			db.close();
+		}
 	}
 
 	public String[] getSaintsForDate(Integer month, Integer day) {
