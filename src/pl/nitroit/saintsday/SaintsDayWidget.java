@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import pl.nitroit.saintsday.db.SaintsDayDao;
+import pl.nitroit.saintsday.notification.UserNotifier;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;

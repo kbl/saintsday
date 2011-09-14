@@ -1,13 +1,14 @@
 /**
  * Sep 14, 2011
  */
-package pl.nitroit.saintsday;
+package pl.nitroit.saintsday.notification;
 
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import pl.nitroit.saintsday.R;
 import pl.nitroit.saintsday.db.SaintsDayDao;
 import android.app.Notification;
 import android.app.NotificationManager;
