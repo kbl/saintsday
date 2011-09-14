@@ -10,6 +10,9 @@
 	<application 
 			android:icon="@drawable/icon" 
 			android:label="@string/appName">
+
+		<activity android:name=".notification.UserNotificationActivity" />
+
 		<receiver android:name=".SaintsDayWidget">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -18,6 +21,6 @@
 					android:name="android.appwidget.provider"
 					android:resource="@xml/widget" />
 		</receiver>
-		
+
 	</application>
 </manifest>

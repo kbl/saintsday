@@ -100,7 +100,7 @@ public class UserNotifier {
 				R.drawable.icon,
 				resources.getString(R.string.notificationTicker),
 				SystemClock.currentThreadTimeMillis());
-		Intent intent = new Intent(context, this.getClass());
+		Intent intent = new Intent(context, UserNotificationActivity.class);
 		intent.putExtra(CONTACTS_IDS, contactIds);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, intent, 0);
 		notification.setLatestEventInfo(
