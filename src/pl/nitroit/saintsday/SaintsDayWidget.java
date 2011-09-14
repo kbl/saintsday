@@ -15,6 +15,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -29,6 +30,7 @@ public class SaintsDayWidget extends AppWidgetProvider {
 	private StringBuilder builder;
 
 	private String[] todaySaints;
+
 
 	@Override
 	public void onUpdate(
@@ -57,11 +59,14 @@ public class SaintsDayWidget extends AppWidgetProvider {
 					contactUri,
 					new String[] {ContactsContract.Contacts.Data._ID, ContactsContract.Contacts.DISPLAY_NAME},
 					null, null, null);
+			Log.d("x", contactUri.toString());
+			Log.d("x", String.valueOf(contactsCursor.getCount()));
 			if(contactsCursor.moveToFirst()) {
 				do {
 					int id = contactsCursor.getInt(0);
 					String displayName = contactsCursor.getString(1);
 					x.add(displayName);
+					Log.d("x", displayName);
 				} while(contactsCursor.moveToNext());
 			}
 		}

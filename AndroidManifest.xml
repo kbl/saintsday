@@ -18,5 +18,6 @@
 					android:name="android.appwidget.provider"
 					android:resource="@xml/widget" />
 		</receiver>
+		
 	</application>
 </manifest>
