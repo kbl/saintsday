@@ -34,19 +34,21 @@ public class UserNotifier {
 	private String[] todaySaints;
 	private SaintsDayDao dao;
 
-	public UserNotifier(Context context) {
+	public UserNotifier(Context context, String[] todaySaints) {
 		this.context = context;
+		this.todaySaints = todaySaints;
 		dao = new SaintsDayDao(context);
 	}
 
 	public void notifiyAboutTodaySaints() {
+		dao.open();
 		if(notificationShouldBeSend()) {
 			Set<Integer> contactIds = obtainContactIdsToNotify();
 			if(!contactIds.isEmpty()) {
 				NotificationManager manager =
 						(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 				manager.notify(NOTIFICATION_ID, createNotification(contactIds));
-				dao.open().setLastNotifiedAndRemoveOldTimestamp(new Date());
+				dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
 			}
 		}
 		dao.close();
@@ -85,7 +87,7 @@ public class UserNotifier {
 				"works?",
 				SystemClock.currentThreadTimeMillis());
 		Intent intent = new Intent(context, this.getClass());
-		intent.getExtras().putLongArray("abc", new long[0]);
+		intent.putExtra("abc", new long[0]);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, intent, 0);
 		notification.setLatestEventInfo(context, "bu", "buz", contentIntent);
 
