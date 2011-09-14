@@ -45,11 +45,11 @@ public class DbSeeder {
 	}
 
 	private void insertRows(Record record) {
-		values.put(SaintsDayDao.DAY_COLUMN, record.day);
-		values.put(SaintsDayDao.MONTH_COLUMN, record.month);
+		values.put(SaintsDayDao.NAMES_DAY_COLUMN, record.day);
+		values.put(SaintsDayDao.NAMES_MONTH_COLUMN, record.month);
 		for(String name : record.names) {
-			values.put(SaintsDayDao.NAME_COLUMN, name);
-			db.insert(SaintsDayDao.TABLE, null, values);
+			values.put(SaintsDayDao.NAMES_NAME_COLUMN, name);
+			db.insert(SaintsDayDao.NAMES_TABLE, null, values);
 		}
 	}
 

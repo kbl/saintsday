@@ -17,11 +17,15 @@ public class SaintsDayDbHelper extends SQLiteOpenHelper {
 	private static final int VERSION = 1;
 	private static final String DB_NAME = "saints_day.db";
 
-	private static final String CREATE_DB_STMT = "CREATE  TABLE names (" +
-			"_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE," +
-			"day INTEGER NOT NULL," +
-			"month INTEGER NOT NULL," +
-			"name VARCHAR NOT NULL);";
+	private static final String[] CREATE_DB_STMT = {
+			"CREATE TABLE names (" +
+				"_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE," +
+				"day INTEGER NOT NULL," +
+				"month INTEGER NOT NULL," +
+				"name VARCHAR NOT NULL);",
+			"CREATE TABLE notifications_history (" +
+				"_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE," +
+				"notification_timestamp INTEGER NOT NULL);"};
 
 	// unfortunatelly context in parent isn't accessible ):
 	private Context context;
@@ -33,7 +37,9 @@ public class SaintsDayDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(CREATE_DB_STMT);
+		for(String stmt : CREATE_DB_STMT) {
+			db.execSQL(stmt);
+		}
 		new DbSeeder(context.getAssets(), db).seedDb();
 	}
 

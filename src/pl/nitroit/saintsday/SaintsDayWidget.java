@@ -5,6 +5,7 @@ package pl.nitroit.saintsday;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -49,6 +51,12 @@ public class SaintsDayWidget extends AppWidgetProvider {
 			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
 			views.setTextViewText(R.id.saintsDayNames, todaysSaints);
 			appWidgetManager.updateAppWidget(appWidgetIds[i], views);
+		}
+
+		long notificationTimestamp = dao.getLastNotifiedTimestamp();
+		if(notificationTimestamp == SaintsDayDao.NO_NOTIFICATION || !DateUtils.isToday(notificationTimestamp)) {
+
+			dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
 		}
 
 		dao.close();

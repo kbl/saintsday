@@ -3,6 +3,9 @@
  */
 package pl.nitroit.saintsday.db;
 
+import java.util.Date;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,11 +16,16 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class SaintsDayDao {
 
-	public static final String TABLE = "names";
+	public static final int NO_NOTIFICATION = 0;
 
-	public static final String DAY_COLUMN = "day";
-	public static final String MONTH_COLUMN = "month";
-	public static final String NAME_COLUMN = "name";
+	private static final String NOTIFICATIONS_HISTORY_TABLE = "notifications_history";
+	private static final String NOTIFICATIONS_HISTORY_TIMESTAMP_COLUMN = "notification_timestamp";
+
+	public static final String NAMES_TABLE = "names";
+
+	public static final String NAMES_DAY_COLUMN = "day";
+	public static final String NAMES_MONTH_COLUMN = "month";
+	public static final String NAMES_NAME_COLUMN = "name";
 
 	private SaintsDayDbHelper helper;
 	private SQLiteDatabase db;
@@ -39,8 +47,8 @@ public class SaintsDayDao {
 
 	public String[] getSaintsForDate(Integer month, Integer day) {
 		Cursor names = db.query(
-				TABLE,
-				new String[] { NAME_COLUMN },
+				NAMES_TABLE,
+				new String[] { NAMES_NAME_COLUMN },
 				"month = ? AND day = ?",
 				new String[] { String.valueOf(month), String.valueOf(day)}, null, null, null);
 
@@ -58,6 +66,38 @@ public class SaintsDayDao {
 		} while(names.moveToNext());
 
 		return returnedNames;
+	}
+
+	public long getLastNotifiedTimestamp() {
+		Cursor notificationHistory = db.query(
+				NOTIFICATIONS_HISTORY_TABLE,
+				new String[] {NOTIFICATIONS_HISTORY_TIMESTAMP_COLUMN},
+				null, null, null, null,
+				"_id desc");
+		if(notificationHistory.moveToFirst()) {
+			return notificationHistory.getLong(0);
+		}
+		return NO_NOTIFICATION;
+	}
+
+	public void setLastNotifiedAndRemoveOldTimestamp(Date notificationTime) {
+		try {
+			db.beginTransaction();
+
+			deleteOldAndInsertNewNotificationTimestamp(notificationTime);
+
+			db.setTransactionSuccessful();
+		} finally {
+			db.endTransaction();
+		}
+	}
+
+	private void deleteOldAndInsertNewNotificationTimestamp(
+			Date notificationTime) {
+		db.delete(NOTIFICATIONS_HISTORY_TABLE, null, null);
+		ContentValues values = new ContentValues();
+		values.put(NOTIFICATIONS_HISTORY_TIMESTAMP_COLUMN, notificationTime.getTime());
+		db.insert(NOTIFICATIONS_HISTORY_TABLE, null, values);
 	}
 
 }
