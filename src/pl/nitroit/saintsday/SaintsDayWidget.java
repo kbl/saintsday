@@ -24,6 +24,8 @@ import android.widget.RemoteViews;
  */
 public class SaintsDayWidget extends AppWidgetProvider {
 
+	private static final String WHERE_EXISTS_PHONE_NUMBER = ContactsContract.Data.HAS_PHONE_NUMBER + " = 1";
+
 	private static final int REAL_MONTH = 1;
 
 	private SaintsDayDao dao;
@@ -58,7 +60,9 @@ public class SaintsDayWidget extends AppWidgetProvider {
 			Cursor contactsCursor = context.getContentResolver().query(
 					contactUri,
 					new String[] {ContactsContract.Contacts.Data._ID, ContactsContract.Contacts.DISPLAY_NAME},
-					null, null, null);
+					WHERE_EXISTS_PHONE_NUMBER,
+					null,
+					null);
 			Log.d("x", contactUri.toString());
 			Log.d("x", String.valueOf(contactsCursor.getCount()));
 			if(contactsCursor.moveToFirst()) {
@@ -66,7 +70,7 @@ public class SaintsDayWidget extends AppWidgetProvider {
 					int id = contactsCursor.getInt(0);
 					String displayName = contactsCursor.getString(1);
 					x.add(displayName);
-					Log.d("x", displayName);
+					Log.d("x", displayName + " " + id);
 				} while(contactsCursor.moveToNext());
 			}
 		}
