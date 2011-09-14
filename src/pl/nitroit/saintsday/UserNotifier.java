@@ -14,6 +14,7 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -92,14 +93,19 @@ public class UserNotifier {
 	}
 
 	private Notification createNotification(long[] contactIds) {
+		Resources resources = context.getResources();
 		Notification notification = new Notification(
 				R.drawable.icon,
-				"works?",
+				resources.getString(R.string.notificationTicker),
 				SystemClock.currentThreadTimeMillis());
 		Intent intent = new Intent(context, this.getClass());
 		intent.putExtra(CONTACTS_IDS, contactIds);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, intent, 0);
-		notification.setLatestEventInfo(context, "bu", "buz", contentIntent);
+		notification.setLatestEventInfo(
+				context,
+				resources.getString(R.string.notificationTitle),
+				resources.getString(R.string.notificationText),
+				contentIntent);
 
 		return notification ;
 	}
