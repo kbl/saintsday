@@ -3,11 +3,11 @@
  */
 package pl.nitroit.saintsday;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import pl.nitroit.saintsday.db.SaintsDayDao;
 import android.appwidget.AppWidgetManager;
@@ -18,7 +18,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -49,7 +48,7 @@ public class SaintsDayWidget extends AppWidgetProvider {
 
 		initializeDao();
 		updateWidgetView(appWidgetManager, appWidgetIds);
-		notifiyAboutTodaySaints();
+		new UserNotifier().notifiyAboutTodaySaints();
 
 		dao.close();
 	}
@@ -89,35 +88,42 @@ public class SaintsDayWidget extends AppWidgetProvider {
 		return builder.toString();
 	}
 
-	private void notifiyAboutTodaySaints() {
-		long notificationTimestamp = dao.getLastNotifiedTimestamp();
-		if(notificationTimestamp == SaintsDayDao.NO_NOTIFICATION || !DateUtils.isToday(notificationTimestamp)) {
-			dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
+	private final class UserNotifier {
 
-			List<String> x = new ArrayList<String>();
+		public void notifiyAboutTodaySaints() {
+			if(notificationShouldBeSend()) {
+				Set<Integer> contacts = obtainContactsToNotify();
+				dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
+			}
+		}
+
+		private Set<Integer> obtainContactsToNotify() {
+			Set<Integer> contacts = new HashSet<Integer>();
 			ContentResolver contentResolver = context.getContentResolver();
 
 			for(String saintName : todaySaints) {
 				Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI, saintName);
 				Cursor contactsCursor = contentResolver.query(
 						contactUri,
-						new String[] {ContactsContract.Contacts.Data._ID, ContactsContract.Contacts.DISPLAY_NAME},
+						new String[] {ContactsContract.Contacts.Data._ID},
 						WHERE_EXISTS_PHONE_NUMBER,
 						null,
 						null);
-				Log.d("x", contactUri.toString());
-				Log.d("x", String.valueOf(contactsCursor.getCount()));
 				if(contactsCursor.moveToFirst()) {
 					do {
-						int id = contactsCursor.getInt(0);
-						String displayName = contactsCursor.getString(1);
-						x.add(displayName);
-						Log.d("x", displayName + " " + id);
+						contacts.add(contactsCursor.getInt(0));
 					} while(contactsCursor.moveToNext());
 				}
 			}
-
+			return contacts;
 		}
+
+		private boolean notificationShouldBeSend() {
+			long notificationTimestamp = dao.getLastNotifiedTimestamp();
+			return notificationTimestamp == SaintsDayDao.NO_NOTIFICATION ||
+					!DateUtils.isToday(notificationTimestamp);
+		}
+
 	}
 
 }
