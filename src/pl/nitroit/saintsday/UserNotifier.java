@@ -3,6 +3,7 @@
  */
 package pl.nitroit.saintsday;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -104,7 +105,7 @@ public class UserNotifier {
 		notification.setLatestEventInfo(
 				context,
 				resources.getString(R.string.notificationTitle),
-				resources.getString(R.string.notificationText),
+				MessageFormat.format(resources.getString(R.string.notificationText), contactIds.length),
 				contentIntent);
 
 		return notification ;
