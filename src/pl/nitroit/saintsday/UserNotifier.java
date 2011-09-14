@@ -26,6 +26,7 @@ import android.text.format.DateUtils;
  */
 public class UserNotifier {
 
+	public static final String CONTACTS_IDS = "UserNotifier.contacts_ids";
 	public static final int NOTIFICATION_ID = 123321;
 
 	private static final String WHERE_EXISTS_PHONE_NUMBER = ContactsContract.Data.HAS_PHONE_NUMBER + " = 1";
@@ -43,8 +44,8 @@ public class UserNotifier {
 	public void notifiyAboutTodaySaints() {
 		dao.open();
 		if(notificationShouldBeSend()) {
-			Set<Integer> contactIds = obtainContactIdsToNotify();
-			if(!contactIds.isEmpty()) {
+			long[] contactIds = obtainContactIdsToNotify();
+			if(contactIds.length != 0) {
 				NotificationManager manager =
 						(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 				manager.notify(NOTIFICATION_ID, createNotification(contactIds));
@@ -60,8 +61,8 @@ public class UserNotifier {
 				!DateUtils.isToday(notificationTimestamp);
 	}
 
-	private Set<Integer> obtainContactIdsToNotify() {
-		Set<Integer> contacts = new HashSet<Integer>();
+	private long[] obtainContactIdsToNotify() {
+		Set<Long> contacts = new HashSet<Long>();
 		ContentResolver contentResolver = context.getContentResolver();
 
 		for(String saintName : todaySaints) {
@@ -74,20 +75,29 @@ public class UserNotifier {
 					null);
 			if(contactsCursor.moveToFirst()) {
 				do {
-					contacts.add(contactsCursor.getInt(0));
+					contacts.add(contactsCursor.getLong(0));
 				} while(contactsCursor.moveToNext());
 			}
 		}
-		return contacts;
+		return createArrayFromSet(contacts);
 	}
 
-	private Notification createNotification(Set<Integer> contactIds) {
+	private long[] createArrayFromSet(Set<Long> contacts) {
+		long[] returnedArray = new long[contacts.size()];
+		int arrayIndex = 0;
+		for(Long contactId : contacts) {
+			returnedArray[arrayIndex++] = contactId;
+		}
+		return returnedArray;
+	}
+
+	private Notification createNotification(long[] contactIds) {
 		Notification notification = new Notification(
 				R.drawable.icon,
 				"works?",
 				SystemClock.currentThreadTimeMillis());
 		Intent intent = new Intent(context, this.getClass());
-		intent.putExtra("abc", new long[0]);
+		intent.putExtra(CONTACTS_IDS, contactIds);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, intent, 0);
 		notification.setLatestEventInfo(context, "bu", "buz", contentIntent);
 
