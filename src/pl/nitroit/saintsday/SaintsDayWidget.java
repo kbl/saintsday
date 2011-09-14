@@ -5,7 +5,6 @@ package pl.nitroit.saintsday;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import pl.nitroit.saintsday.db.SaintsDayDao;
 import android.appwidget.AppWidgetManager;
@@ -23,6 +22,8 @@ public class SaintsDayWidget extends AppWidgetProvider {
 
 	private SaintsDayDao dao;
 	private StringBuilder builder;
+
+	private String[] todaySaints;
 
 	@Override
 	public void onUpdate(
@@ -42,6 +43,7 @@ public class SaintsDayWidget extends AppWidgetProvider {
 		}
 
 		dao.close();
+
 	}
 
 	private void initializeDao(Context context) {
@@ -55,13 +57,13 @@ public class SaintsDayWidget extends AppWidgetProvider {
 		Calendar calendar = GregorianCalendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int realMonth = calendar.get(Calendar.MONTH) + REAL_MONTH;
-		List<String> names = dao.getSaintsForDate(realMonth, day);
-		return concatenateNames(names);
+		todaySaints = dao.getSaintsForDate(realMonth, day);
+		return concatenateNames();
 	}
 
-	private String concatenateNames(List<String> names) {
+	private String concatenateNames() {
 		builder.setLength(0);
-		for(String name : names) {
+		for(String name : todaySaints) {
 			builder.append(name);
 			builder.append(" ");
 		}

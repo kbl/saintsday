@@ -3,9 +3,6 @@
  */
 package pl.nitroit.saintsday.db;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -40,7 +37,7 @@ public class SaintsDayDao {
 		db.close();
 	}
 
-	public List<String> getSaintsForDate(Integer month, Integer day) {
+	public String[] getSaintsForDate(Integer month, Integer day) {
 		Cursor names = db.query(
 				TABLE,
 				new String[] { NAME_COLUMN },
@@ -50,13 +47,14 @@ public class SaintsDayDao {
 		return getNamesFromCursor(names);
 	}
 
-	private List<String> getNamesFromCursor(Cursor names) {
-		List<String> returnedNames = new ArrayList<String>(names.getCount());
+	private String[] getNamesFromCursor(Cursor names) {
+		String[] returnedNames = new String[names.getCount()];
 
 		int nameColumnIndex = 0;
+		int arrayIndex = 0;
 		names.moveToFirst();
 		do {
-			returnedNames.add(names.getString(nameColumnIndex));
+			returnedNames[arrayIndex++] = names.getString(nameColumnIndex);
 		} while(names.moveToNext());
 
 		return returnedNames;
