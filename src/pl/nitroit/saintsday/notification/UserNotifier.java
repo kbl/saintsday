@@ -4,9 +4,8 @@
 package pl.nitroit.saintsday.notification;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import pl.nitroit.saintsday.R;
 import pl.nitroit.saintsday.db.SaintsDayDao;
@@ -29,6 +28,9 @@ import android.text.format.DateUtils;
  */
 public class UserNotifier {
 
+	private static final int NAME_COLUMN = 0;
+	private static final int PHONE_COLUMN = 1;
+
 	public static final String CONTACTS_IDS = "UserNotifier.contacts_ids";
 	public static final int NOTIFICATION_ID = 123321;
 
@@ -47,8 +49,8 @@ public class UserNotifier {
 	public void notifiyAboutTodaySaints() {
 		dao.open();
 		if(notificationShouldBeSend()) {
-			long[] contactIds = obtainContactIdsToNotify();
-			if(contactIds.length != 0) {
+			ArrayList<Contact> contactIds = obtainContactIdsToNotify();
+			if(!contactIds.isEmpty()) {
 				NotificationManager manager =
 						(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 				manager.notify(NOTIFICATION_ID, createNotification(contactIds));
@@ -64,37 +66,34 @@ public class UserNotifier {
 				!DateUtils.isToday(notificationTimestamp);
 	}
 
-	private long[] obtainContactIdsToNotify() {
-		Set<Long> contacts = new HashSet<Long>();
+	private ArrayList<Contact> obtainContactIdsToNotify() {
+		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		ContentResolver contentResolver = context.getContentResolver();
 
 		for(String saintName : todaySaints) {
 			Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI, saintName);
 			Cursor contactsCursor = contentResolver.query(
 					contactUri,
-					new String[] {ContactsContract.Contacts.Data._ID},
+					new String[] {},
 					WHERE_EXISTS_PHONE_NUMBER,
 					null,
 					null);
 			if(contactsCursor.moveToFirst()) {
 				do {
-					contacts.add(contactsCursor.getLong(0));
+					contacts.add(createContact(contactsCursor));
 				} while(contactsCursor.moveToNext());
 			}
 		}
-		return createArrayFromSet(contacts);
+		return contacts;
 	}
 
-	private long[] createArrayFromSet(Set<Long> contacts) {
-		long[] returnedArray = new long[contacts.size()];
-		int arrayIndex = 0;
-		for(Long contactId : contacts) {
-			returnedArray[arrayIndex++] = contactId;
-		}
-		return returnedArray;
+	private Contact createContact(Cursor contactsCursor) {
+		return new Contact(
+				contactsCursor.getString(NAME_COLUMN),
+				contactsCursor.getString(PHONE_COLUMN));
 	}
 
-	private Notification createNotification(long[] contactIds) {
+	private Notification createNotification(ArrayList<Contact> contactIds) {
 		Resources resources = context.getResources();
 		Notification notification = new Notification(
 				R.drawable.icon,
@@ -106,7 +105,7 @@ public class UserNotifier {
 		notification.setLatestEventInfo(
 				context,
 				resources.getString(R.string.notificationTitle),
-				MessageFormat.format(resources.getString(R.string.notificationText), contactIds.length),
+				MessageFormat.format(resources.getString(R.string.notificationText), contactIds.size()),
 				contentIntent);
 
 		return notification ;

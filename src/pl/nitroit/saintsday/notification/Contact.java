@@ -3,24 +3,22 @@
  */
 package pl.nitroit.saintsday.notification;
 
+import java.io.Serializable;
+
 /**
  * @author kbl
  *
  */
-public class Contact {
+public class Contact implements Serializable {
 
-	private long id;
+	private static final long serialVersionUID = 1L;
+
 	private String name;
 	private String phoneNumber;
 
-	public Contact(long id, String name) {
-		this.id = id;
+	public Contact(String name, String phoneNumber) {
 		this.name = name;
 		this.phoneNumber = "+48606724038";
-	}
-
-	protected long getId() {
-		return id;
 	}
 
 	protected String getName() {
