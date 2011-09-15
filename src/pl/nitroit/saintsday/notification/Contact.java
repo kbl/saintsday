@@ -18,7 +18,7 @@ public class Contact implements Serializable {
 
 	public Contact(String name, String phoneNumber) {
 		this.name = name;
-		this.phoneNumber = "+48606724038";
+		this.phoneNumber = phoneNumber;
 	}
 
 	protected String getName() {
