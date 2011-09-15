@@ -44,7 +44,6 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		prepareCallButton(call);
 
 		ImageButton sms = (ImageButton) rowView.findViewById(R.id.sent_message_icon);
-		sms.setImageResource(android.R.drawable.ic_menu_send);
 
 		TextView display = (TextView) rowView.findViewById(R.id.display_name);
 		display.setText(contact.getName());
@@ -58,7 +57,7 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 			@Override
 			public void onClick(View v) {
 				Intent callIntent = new Intent(Intent.ACTION_CALL);
-				callIntent.setData(Uri.parse("tel:+48123456789"));
+				callIntent.setData(Uri.parse("tel:+48606724038"));
 				context.startActivity(callIntent);
 			}
 		});
