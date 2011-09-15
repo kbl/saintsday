@@ -11,7 +11,12 @@
 			android:icon="@drawable/icon" 
 			android:label="@string/appName">
 
-		<activity android:name=".notification.UserNotificationActivity" />
+		<activity android:name=".notification.UserNotificationActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>	
+		</activity>
 
 		<receiver android:name=".SaintsDayWidget">
 			<intent-filter>
