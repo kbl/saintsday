@@ -44,6 +44,7 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		prepareCallButton(call);
 
 		ImageButton sms = (ImageButton) rowView.findViewById(R.id.sent_message_icon);
+		prepareMessageButton(sms);
 
 		TextView display = (TextView) rowView.findViewById(R.id.display_name);
 		display.setText(contact.getName());
@@ -51,8 +52,20 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		return rowView;
 	}
 
+	private void prepareMessageButton(ImageButton sms) {
+		sms.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+				sendIntent.putExtra("address", "+48606724038");
+				sendIntent.putExtra("sms_body", "The SMS text");
+				sendIntent.setType("vnd.android-dir/mms-sms");
+				context.startActivity(sendIntent);
+			}
+		});
+	}
+
 	private void prepareCallButton(ImageButton call) {
-		call.setImageResource(android.R.drawable.ic_menu_call);
 		call.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
