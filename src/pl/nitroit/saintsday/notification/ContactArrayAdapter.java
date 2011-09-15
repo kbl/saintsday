@@ -7,6 +7,8 @@ import java.util.List;
 
 import pl.nitroit.saintsday.R;
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +41,7 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		avatar.setImageResource(android.R.drawable.ic_menu_manage);
 
 		ImageButton call = (ImageButton) rowView.findViewById(R.id.call_icon);
-		call.setImageResource(android.R.drawable.ic_menu_call);
+		prepareCallButton(call);
 
 		ImageButton sms = (ImageButton) rowView.findViewById(R.id.sent_message_icon);
 		sms.setImageResource(android.R.drawable.ic_menu_send);
@@ -48,6 +50,18 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		display.setText(contact.getName());
 
 		return rowView;
+	}
+
+	private void prepareCallButton(ImageButton call) {
+		call.setImageResource(android.R.drawable.ic_menu_call);
+		call.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent callIntent = new Intent(Intent.ACTION_CALL);
+				callIntent.setData(Uri.parse("tel:+48123456789"));
+				context.startActivity(callIntent);
+			}
+		});
 	}
 
 }
