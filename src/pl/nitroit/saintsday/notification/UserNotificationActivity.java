@@ -25,7 +25,7 @@ public class UserNotificationActivity extends ListActivity {
 	}
 
 	private List<Contact> prepareContacts(long[] contactIds) {
-		List<Contact> returned = new ArrayList<Contact>(contactIds.length);
+		List<Contact> returned = new ArrayList<Contact>();
 
 		returned.add(new Contact(1, "Marcin Pietraszek"));
 		returned.add(new Contact(1, "Zenon Laskowik"));
