@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="appName">Saint\'s Day</string>
-	
+
 	<string name="notificationTicker">Hurrey!</string>
 	<string name="notificationTitle">It\'s special day for your fried(s)!</string>
 	<string name="notificationText">Please remember to wish the best for {0} of your fried(s).</string>
+
+	<string name="sms_body">Best wishes! (ps. great android app help me remember about your saint day)</string>
+
 </resources>

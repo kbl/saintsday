@@ -58,7 +58,7 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 			public void onClick(View v) {
 				Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 				sendIntent.putExtra("address", "+48606724038");
-				sendIntent.putExtra("sms_body", "The SMS text");
+				sendIntent.putExtra("sms_body", context.getResources().getString(R.string.sms_body));
 				sendIntent.setType("vnd.android-dir/mms-sms");
 				context.startActivity(sendIntent);
 			}
