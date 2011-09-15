@@ -11,10 +11,12 @@ public class Contact {
 
 	private long id;
 	private String name;
+	private String phoneNumber;
 
 	public Contact(long id, String name) {
 		this.id = id;
 		this.name = name;
+		this.phoneNumber = "+48606724038";
 	}
 
 	protected long getId() {
@@ -23,6 +25,10 @@ public class Contact {
 
 	protected String getName() {
 		return name;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
 }

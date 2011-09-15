@@ -23,7 +23,7 @@ import android.widget.TextView;
  */
 public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 
-	private Activity context;
+	private final Activity context;
 
 	public ContactArrayAdapter(Activity context, List<Contact> contacts) {
 		super(context, R.layout.list_item, contacts);
@@ -41,10 +41,10 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		avatar.setImageResource(android.R.drawable.ic_menu_manage);
 
 		ImageButton call = (ImageButton) rowView.findViewById(R.id.call_icon);
-		prepareCallButton(call);
+		prepareCallButton(call, contact.getPhoneNumber());
 
 		ImageButton sms = (ImageButton) rowView.findViewById(R.id.sent_message_icon);
-		prepareMessageButton(sms);
+		prepareMessageButton(sms, contact.getPhoneNumber());
 
 		TextView display = (TextView) rowView.findViewById(R.id.display_name);
 		display.setText(contact.getName());
@@ -52,12 +52,12 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		return rowView;
 	}
 
-	private void prepareMessageButton(ImageButton sms) {
+	private void prepareMessageButton(ImageButton sms, final String phoneNumber) {
 		sms.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-				sendIntent.putExtra("address", "+48606724038");
+				sendIntent.putExtra("address", phoneNumber);
 				sendIntent.putExtra("sms_body", context.getResources().getString(R.string.sms_body));
 				sendIntent.setType("vnd.android-dir/mms-sms");
 				context.startActivity(sendIntent);
@@ -65,12 +65,12 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		});
 	}
 
-	private void prepareCallButton(ImageButton call) {
+	private void prepareCallButton(ImageButton call, final String phoneNumber) {
 		call.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent callIntent = new Intent(Intent.ACTION_CALL);
-				callIntent.setData(Uri.parse("tel:+48606724038"));
+				callIntent.setData(Uri.parse("tel:" + phoneNumber));
 				context.startActivity(callIntent);
 			}
 		});
