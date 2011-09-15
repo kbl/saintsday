@@ -4,17 +4,11 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 		
-	<LinearLayout 
-			android:orientation="horizontal"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
+	<TextView android:id="@+id/display_name"
 			android:layout_centerInParent="true"
-			android:layout_alignParentLeft="true">
-		<TextView android:id="@+id/display_name"
-				android:gravity="center"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent" />
-	</LinearLayout>
+			android:layout_alignParentLeft="true"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent" />
 	
 	<LinearLayout 
 			android:orientation="horizontal"
