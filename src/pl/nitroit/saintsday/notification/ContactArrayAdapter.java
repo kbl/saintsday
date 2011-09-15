@@ -23,16 +23,13 @@ import android.widget.TextView;
  */
 public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 
-	private final Activity context;
-
 	public ContactArrayAdapter(Activity context, List<Contact> contacts) {
 		super(context, R.layout.list_item, contacts);
-		this.context = context;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = context.getLayoutInflater();
+		LayoutInflater inflater = ((Activity)getContext()).getLayoutInflater();
 		View rowView = inflater.inflate(R.layout.list_item, null);
 
 		Contact contact = getItem(position);
@@ -58,9 +55,9 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 			public void onClick(View v) {
 				Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 				sendIntent.putExtra("address", phoneNumber);
-				sendIntent.putExtra("sms_body", context.getResources().getString(R.string.sms_body));
+				sendIntent.putExtra("sms_body", getContext().getResources().getString(R.string.sms_body));
 				sendIntent.setType("vnd.android-dir/mms-sms");
-				context.startActivity(sendIntent);
+				getContext().startActivity(sendIntent);
 			}
 		});
 	}
@@ -71,7 +68,7 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 			public void onClick(View v) {
 				Intent callIntent = new Intent(Intent.ACTION_CALL);
 				callIntent.setData(Uri.parse("tel:" + phoneNumber));
-				context.startActivity(callIntent);
+				getContext().startActivity(callIntent);
 			}
 		});
 	}
