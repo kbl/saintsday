@@ -6,6 +6,7 @@ package pl.nitroit.saintsday.notification;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.nitroit.saintsday.R;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,12 @@ public class UserNotificationActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		contactIds = getIntent().getLongArrayExtra(UserNotifier.CONTACTS_IDS);
-		setListAdapter(new ArrayAdapter<Long>(this, android.R.layout.simple_list_item_1, prepareContacts(contactIds)));
+		ArrayAdapter<Long> adapter = new ArrayAdapter<Long>(
+				this,
+				R.layout.list_item,
+				prepareContacts(contactIds));
+
+		setListAdapter(adapter);
 	}
 
 	private List<Long> prepareContacts(long[] contactIds) {
