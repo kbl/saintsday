@@ -34,7 +34,8 @@ public class UserNotifier {
 	public static final String CONTACTS_IDS = "UserNotifier.contacts_ids";
 	public static final int NOTIFICATION_ID = 123321;
 
-	private static final String WHERE_EXISTS_PHONE_NUMBER = ContactsContract.Data.HAS_PHONE_NUMBER + " = 1";
+	private static final String WHERE_EXISTS_PHONE_NUMBER =
+			ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER + " = 1";
 
 	private Context context;
 	private String[] todaySaints;
@@ -71,11 +72,13 @@ public class UserNotifier {
 		ContentResolver contentResolver = context.getContentResolver();
 
 		for(String saintName : todaySaints) {
-			Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI, saintName);
+			Uri contactUri = Uri.withAppendedPath(ContactsContract.CommonDataKinds.Phone.CONTENT_FILTER_URI, saintName);
 			Cursor contactsCursor = contentResolver.query(
 					contactUri,
-					new String[] {},
-					WHERE_EXISTS_PHONE_NUMBER,
+					new String[] {
+						ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+						ContactsContract.CommonDataKinds.Phone.NUMBER},
+					null,
 					null,
 					null);
 			if(contactsCursor.moveToFirst()) {
