@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -33,9 +32,6 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> {
 		View rowView = inflater.inflate(R.layout.list_item, null);
 
 		Contact contact = getItem(position);
-
-		ImageView avatar = (ImageView) rowView.findViewById(R.id.avatar);
-		avatar.setImageResource(android.R.drawable.ic_menu_manage);
 
 		ImageButton call = (ImageButton) rowView.findViewById(R.id.call_icon);
 		prepareCallButton(call, contact.getPhoneNumber());

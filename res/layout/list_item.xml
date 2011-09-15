@@ -7,10 +7,9 @@
 	<LinearLayout 
 			android:orientation="horizontal"
 			android:layout_width="wrap_content"
-			android:layout_height="fill_parent">
-		<ImageView android:id="@+id/avatar"
-				android:layout_width="wrap_content"
-				android:layout_height="fill_parent" />
+			android:layout_height="fill_parent"
+			android:layout_centerInParent="true"
+			android:layout_alignParentLeft="true">
 		<TextView android:id="@+id/display_name"
 				android:gravity="center"
 				android:layout_width="wrap_content"
@@ -21,6 +20,7 @@
 			android:orientation="horizontal"
 			android:layout_width="wrap_content"
 			android:layout_height="fill_parent"
+			android:layout_centerInParent="true"
 			android:layout_alignParentRight="true">
 		<ImageButton android:id="@+id/call_icon"
 				android:src="@android:drawable/ic_menu_call"
