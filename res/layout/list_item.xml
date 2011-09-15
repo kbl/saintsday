@@ -25,7 +25,7 @@
 		<ImageButton android:id="@+id/call_icon"
 				android:src="@android:drawable/ic_menu_call"
 				style="@style/intent_button" />
-		<ImageButton android:id="@+id/sent_message_icon" 
+		<ImageButton android:id="@+id/sent_message_icon"
 				android:src="@android:drawable/ic_menu_send"
 				style="@style/intent_button" />
 	</LinearLayout>
