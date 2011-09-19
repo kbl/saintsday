@@ -51,13 +51,7 @@ public class UserNotifier {
 		dao.open();
 		try {
 			if(notificationShouldBeSend()) {
-				ArrayList<Contact> contactIds = obtainContactIdsToNotify();
-				if(!contactIds.isEmpty()) {
-					NotificationManager manager =
-							(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-					manager.notify(NOTIFICATION_ID, createNotification(contactIds));
-					dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
-				}
+				notifyAndWriteLastNotificationDate();
 			}
 		}
 		finally {
@@ -70,6 +64,17 @@ public class UserNotifier {
 		return notificationTimestamp == SaintsDayDao.NO_NOTIFICATION ||
 				!DateUtils.isToday(notificationTimestamp);
 	}
+
+	private void notifyAndWriteLastNotificationDate() {
+		ArrayList<Contact> contactIds = obtainContactIdsToNotify();
+		if(!contactIds.isEmpty()) {
+			NotificationManager manager =
+					(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			manager.notify(NOTIFICATION_ID, createNotification(contactIds));
+			dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
+		}
+	}
+
 
 	private ArrayList<Contact> obtainContactIdsToNotify() {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
