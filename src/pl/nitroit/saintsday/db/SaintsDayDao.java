@@ -54,10 +54,10 @@ public class SaintsDayDao {
 				"month = ? AND day = ?",
 				new String[] { String.valueOf(month), String.valueOf(day)}, null, null, null);
 
-		return getNamesFromCursor(names);
+		return getNamesFromCursorAndCloseCursor(names);
 	}
 
-	private String[] getNamesFromCursor(Cursor names) {
+	private String[] getNamesFromCursorAndCloseCursor(Cursor names) {
 		String[] returnedNames = new String[names.getCount()];
 
 		int nameColumnIndex = 0;
@@ -66,6 +66,7 @@ public class SaintsDayDao {
 		do {
 			returnedNames[arrayIndex++] = names.getString(nameColumnIndex);
 		} while(names.moveToNext());
+		names.close();
 
 		return returnedNames;
 	}
@@ -76,8 +77,13 @@ public class SaintsDayDao {
 				new String[] {NOTIFICATIONS_HISTORY_TIMESTAMP_COLUMN},
 				null, null, null, null,
 				"_id desc");
-		if(notificationHistory.moveToFirst()) {
-			return notificationHistory.getLong(0);
+		try {
+			if(notificationHistory.moveToFirst()) {
+				return notificationHistory.getLong(0);
+			}
+		}
+		finally {
+			notificationHistory.close();
 		}
 		return NO_NOTIFICATION;
 	}
