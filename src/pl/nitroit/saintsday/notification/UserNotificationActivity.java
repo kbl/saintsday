@@ -15,6 +15,7 @@ import android.os.Bundle;
 public class UserNotificationActivity extends ListActivity {
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		List<Contact> contactIds = (List<Contact>) getIntent().getSerializableExtra(UserNotifier.CONTACTS_IDS);
