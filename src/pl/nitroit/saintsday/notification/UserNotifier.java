@@ -49,16 +49,20 @@ public class UserNotifier {
 
 	public void notifiyAboutTodaySaints() {
 		dao.open();
-		if(notificationShouldBeSend()) {
-			ArrayList<Contact> contactIds = obtainContactIdsToNotify();
-			if(!contactIds.isEmpty()) {
-				NotificationManager manager =
-						(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-				manager.notify(NOTIFICATION_ID, createNotification(contactIds));
-				dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
+		try {
+			if(notificationShouldBeSend()) {
+				ArrayList<Contact> contactIds = obtainContactIdsToNotify();
+				if(!contactIds.isEmpty()) {
+					NotificationManager manager =
+							(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+					manager.notify(NOTIFICATION_ID, createNotification(contactIds));
+					dao.setLastNotifiedAndRemoveOldTimestamp(new Date());
+				}
 			}
 		}
-		dao.close();
+		finally {
+			dao.close();
+		}
 	}
 
 	private boolean notificationShouldBeSend() {
@@ -111,7 +115,7 @@ public class UserNotifier {
 				MessageFormat.format(resources.getString(R.string.notificationText), contactIds.size()),
 				contentIntent);
 
-		return notification ;
+		return notification;
 	}
 
 }
